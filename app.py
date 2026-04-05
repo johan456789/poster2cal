@@ -1,16 +1,30 @@
 import json
 import datetime
-from flask import Flask, jsonify, request
-from flask_cors import CORS, cross_origin
-
+from flask import Flask, request, jsonify, make_response
+from flask_cors import CORS
 from llm import get_completion
+
 
 app = Flask(__name__)
 # CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r'/*': {'origins': ['http://localhost:3001']}})
+# app.config['CORS_HEADERS'] = 'Content-Type'
+# cors = CORS(app, resources={r"/process": {"origins": "http://localhost:3001"}})
+CORS(app, resources={r"/process": {"origins": "http://localhost:3001"}})
 
-@cross_origin()
+
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
 def detect_text(path):
     '''
     Detects text in the image binary
@@ -35,8 +49,8 @@ def detect_text(path):
 
     return texts[0].description
 
-@cross_origin()
-def parse_event(description):
+
+def parse_event(texts):
     '''
     Parse the text to get the event name, date, time, and location
     '''
@@ -52,10 +66,10 @@ location: <location>,
 event_desc: <descriptions>
 }'''
     print(prompt)
-    response = get_completion(f'{description}\n{prompt}\n{format}')
+    response = get_completion(f'{texts}\n{prompt}\n{format}')
     return json.loads(response)
 
-@cross_origin()
+
 def create_ical(event):
     '''Create an ical file from the event'''
     from ics import Calendar, Event
@@ -71,7 +85,7 @@ def create_ical(event):
     end_local = parser.parse(event['end']).astimezone(tz.tzlocal())
     e.begin = begin_local.astimezone(pytz.UTC)
     e.end = end_local.astimezone(pytz.UTC)
-    if event['all_day']:
+    if event['all_day']:  # TODO probably need to parse string to get boolean?
         e.make_all_day()
 
     e.location = event['location']
@@ -83,19 +97,25 @@ def create_ical(event):
         my_file.writelines(cal.serialize_iter())
 
 
-@app.route("/process", methods=['POST', 'OPTIONS'])
-@cross_origin()
+@app.route("/process", methods=['POST'])
 def process():
+    path = request.form.get('path')
+    texts = detect_text(path)
+    event = parse_event(texts)
+    create_ical(event)
+    return _corsify_actual_response(jsonify({'response': 'OK'}))
+    # if request.method == "OPTIONS":  # CORS preflight
+    #     return _build_cors_preflight_response()
+    # elif request.method == "POST":  # The actual request following the preflight
+    #     # if 'file' not in request.files:
+    #     #     return jsonify({'error': 'Bad Request'}), 400
+    #     path = request.form.get('path')
+    #     texts = detect_text(path)
+    #     event = parse_event(texts)
+    #     create_ical(event)
+    #     return _corsify_actual_response(jsonify({'response': 'OK'}))
+    # else:
+    #     raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
+
     # if 'file' not in request.files:
     #     return jsonify({'error': 'Bad Request'}), 400
-    data = request.get_json()
-    print(data)
-    descriptions = detect_text(data['path'])
-    event = parse_event(descriptions)
-
-    create_ical(event)
-
-    response = jsonify({'response': 'OK'})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-
-    return response

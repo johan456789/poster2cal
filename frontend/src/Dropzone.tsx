@@ -10,16 +10,15 @@ function Dropzone({customMessage}: DropzoneProps) {
     const {getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles: File[]) => {
             acceptedFiles.forEach((file: File) => {
+                console.log(file.name)
                 const options = {
                     url: 'http://localhost:5000/process',
                     method: 'POST',
                     headers: {
-                      'Accept': 'application/json',
-                      'Access-Control-Allow-Origin': '*'
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    data: {
-                        path: file.name
-                    }
+                    data: `path=${encodeURIComponent(file.name)}`
                   };
                   
                 axios(options)

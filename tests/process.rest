@@ -1,0 +1,70 @@
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6651.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6805.jpg
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6597.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6719.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6718.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6694.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6699.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6700.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6701.PNG
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/112a39f4-2d97-44aa-ae3a-0e95a60abbce.png
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6809.jpg
+
+###
+POST http://localhost:5000/process
+Content-Type: application/x-www-form-urlencoded
+
+path=/Users/johan/Downloads/IMG_6823.PNG

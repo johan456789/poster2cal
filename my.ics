@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:ics.py - http://git.io/lLljaA
+BEGIN:VEVENT
+DESCRIPTION:Join us on cummington mall for the annual ENG Block Party! ENG GOV will have a table with merch + more info on getting involved.
+DTEND:20230908T220000Z
+LOCATION:Cummington Mall\, Boston University
+DTSTART:20230908T200000Z
+SUMMARY:BU Engineering Block Party BBQ
+UID:c2ef0dd3-d969-4323-b175-ad461f93ec4f@c2ef.org
+END:VEVENT
+END:VCALENDAR
